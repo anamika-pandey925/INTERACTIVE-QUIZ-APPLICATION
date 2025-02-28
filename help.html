@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help / FAQ - Quiz Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            margin: 0;
+            padding: 160px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .faq {
+            margin-top: 20px;
+        }
+        .question {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #2e7d32;
+            color: white;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .answer {
+            display: none;
+            padding: 10px;
+            background-color: #c8e6c9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Help / FAQ</h1>
+        <div class="faq">
+            <div class="question" onclick="toggleAnswer(0)">What is this quiz platform?</div>
+            <div class="answer">This platform allows users to take quizzes on various topics and test their knowledge.</div>
+            
+            <div class="question" onclick="toggleAnswer(1)">How do I create a quiz?</div>
+            <div class="answer">You can create a quiz by signing in, navigating to the dashboard, and clicking on 'Create Quiz'.</div>
+            
+            <div class="question" onclick="toggleAnswer(2)">Can I review my previous quiz attempts?</div>
+            <div class="answer">Yes, you can check your past quiz attempts in the 'My Quizzes' section.</div>
+        </div>
+    </div>
+    <script>
+        function toggleAnswer(index) {
+            var answers = document.querySelectorAll('.answer');
+            if (answers[index].style.display === 'block') {
+                answers[index].style.display = 'none';
+            } else {
+                answers[index].style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

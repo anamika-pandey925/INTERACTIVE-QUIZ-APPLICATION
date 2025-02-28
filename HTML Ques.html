@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(white, green);
+        }
+        nav {
+            width: 100%;
+            background-color: #2e7d32;
+            padding: 15px 0;
+            display: flex;
+            justify-content: right;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-left a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-left a:hover {
+            color: #a5d6a7;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid green;
+            background-color: white;
+            color: green;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: green;
+            color: white;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        .leaderboard {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-left">
+            <a href="#">Help/FAQ</a>
+        </div>    
+    </nav>
+    <div class="quiz-container">
+        <p class="question" id="question-text">Loading question...</p>
+        <ul class="options" id="options-list"></ul>
+        <p id="result"></p>
+    </div>
+    <div class="leaderboard" id="leaderboard">
+        <h2>Leaderboard</h2>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+    <script>
+        const quizData = [
+            { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Layout", "HyperText Markup Language", "Home Tool Markup Language"], answer: 2 },
+            { question: "Which language is used for styling web pages?", options: ["HTML", "CSS", "JavaScript", "Python"], answer: 1 },
+            { question: "Which is not a JavaScript framework?", options: ["React", "Angular", "Django", "Vue"], answer: 2 },
+            { question: "What is HTML?", options: ["HTML describes the structure of a webpage", "HTML is the standard markup language mainly used to create web pages", "HTML consists of a set of elements that helps the browser how to view the content", "All of the mentioned"], answer: 3 },
+            { question: "What is the correct syntax of doctype in HTML5?", options: ["</doctype html>", "<doctype html>", "<doctype html!>", "<!doctype html>"], answer: 3 }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            let questionElement = document.getElementById("question-text");
+            let optionsList = document.getElementById("options-list");
+            let resultElement = document.getElementById("result");
+            resultElement.textContent = "";
+            
+            let currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsList.innerHTML = "";
+            
+            currentQuestion.options.forEach((option, index) => {
+                let li = document.createElement("li");
+                let button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                li.appendChild(button);
+                optionsList.appendChild(li);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            let result = document.getElementById("result");
+            if (selectedIndex === quizData[currentQuestionIndex].answer) {
+                result.textContent = "Correct!";
+                result.className = "correct";
+                score += 10;
+                setTimeout(nextQuestion, 1000);
+            } else {
+                result.textContent = "Wrong! Try again.";
+                result.className = "wrong";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showLeaderboard();
+            }
+        }
+
+        function showLeaderboard() {
+            document.querySelector(".quiz-container").style.display = "none";
+            document.getElementById("leaderboard").style.display = "block";
+            document.getElementById("score").textContent = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

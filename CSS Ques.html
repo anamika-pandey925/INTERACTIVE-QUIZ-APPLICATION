@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(white, green);
+        }
+        nav {
+            width: 100%;
+            background-color: #2e7d32;
+            padding: 15px 0;
+            display: flex;
+            justify-content: right;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-left a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-left a:hover {
+            color: #a5d6a7;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid green;
+            background-color: white;
+            color: green;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: green;
+            color: white;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        .leaderboard {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-left">
+            <a href="help.html">Help/FAQ</a>
+        </div>    
+    </nav>
+    <div class="quiz-container">
+        <p class="question" id="question-text">Loading question...</p>
+        <ul class="options" id="options-list"></ul>
+        <p id="result"></p>
+    </div>
+    <div class="leaderboard" id="leaderboard">
+        <h2>Leaderboard</h2>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+    <script>
+        const quizData = [
+            { question: "What does CSS stand for?", options:["Cascading Style Sheets","Creative Style Sheets","Computer Style Sheets","Colorful Style Sheets"], answer: 1 },
+            { question: "What is the primary use of CSS?", options:["To design web pages","To develop web applications","To host web servers","To test web pages"], answer: 1 },
+            { question: "What is the purpose of selectors in CSS?", options:["To select HTML elements","To create HTML elements","To edit HTML elements","To delete HTML elements"], answer: 1 },
+            { question: "What is the purpose of properties in CSS?", options:["To define styles for HTML elements","To define layouts for HTML elements","To define behaviors for HTML elements","To define contents for HTML elements"], answer: 1 },
+            { question: "What is the difference between class and ID in CSS?", options:["Class is used to group elements, while ID is used to uniquely identify an element","Class is used to uniquely identify an element, while ID is used to group elements","Class is used to style elements, while ID is used to layout elements","Class is used to layout elements, while ID is used to style elements"], answer: 1 },
+            { question: "What is the purpose of padding in CSS?", options:["To define space between an element's content and its border","To define space between an element's border and its margin","To define space between an element's margin and its width","To define space between an element's width and its height"],answer: 1 },
+            { question: "What is the purpose of margin in CSS?", options:["To define space between an element and its surrounding elements","To define space between an element's content and its border","To define space between an element's border and its width","To define space between an element's width and its height"],answer: 1 },
+            { question: "What is the purpose of border in CSS?", options:["To define the border of an element","To define the padding of an element","To define the margin of an element","To define the width of an element"], answer: 1 },
+            { question: "What is the purpose of width in CSS?", options:["To define the width of an element","To define the height of an element","To define the padding of an element","To define the margin of an element"], answer: 1 },
+            { question: "What is the purpose of the CSS box model?", options:["To define the layout of an element","To define the style of an element","To define the behavior of an element","To define the structure of an element"], answer: 1 },
+    
+    ];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            let questionElement = document.getElementById("question-text");
+            let optionsList = document.getElementById("options-list");
+            let resultElement = document.getElementById("result");
+            resultElement.textContent = "";
+            
+            let currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsList.innerHTML = "";
+            
+            currentQuestion.options.forEach((option, index) => {
+                let li = document.createElement("li");
+                let button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                li.appendChild(button);
+                optionsList.appendChild(li);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            let result = document.getElementById("result");
+            if (selectedIndex === quizData[currentQuestionIndex].answer) {
+                result.textContent = "Correct!";
+                result.className = "correct";
+                score += 10;
+                setTimeout(nextQuestion, 1000);
+            } else {
+                result.textContent = "Wrong! Try again.";
+                result.className = "wrong";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showLeaderboard();
+            }
+        }
+
+        function showLeaderboard() {
+            document.querySelector(".quiz-container").style.display = "none";
+            document.getElementById("leaderboard").style.display = "block";
+            document.getElementById("score").textContent = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
