@@ -98,3 +98,7 @@ Detailed and accurate documentation should be provided to guide developers and u
 ## Conclusion
 The interactive quiz application aims to provide users with a fun and educational experience while ensuring smooth functionality, security, and ease of use. By implementing best practices in coding, security, and user engagement, this application will serve as a valuable knowledge-testing platform for users of all levels.
 
+##OUTPUT
+
+![Image](https://github.com/user-attachments/assets/bd2f1eb9-d58b-4254-8376-0e654b7586ca)
+
