@@ -6,6 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ command }) => ({
   base: command === 'serve' ? '/' : '/INTERACTIVE-QUIZ-APPLICATION/',
   plugins: [react(), tailwindcss()],
+  build: {
+    outDir: '.',
+    emptyOutDir: false,
+  },
   server: {
     host: '127.0.0.1',
     port: 5173,
