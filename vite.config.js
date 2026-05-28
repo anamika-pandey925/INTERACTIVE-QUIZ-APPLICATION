@@ -1,7 +1,14 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
-  base: './', // Relative paths for perfect subdirectory and GitHub Pages support
+// https://vitejs.dev/config/
+export default defineConfig(({ command }) => ({
+  base: command === 'serve' ? '/' : '/INTERACTIVE-QUIZ-APPLICATION/',
+  plugins: [
+    react(),
+    tailwindcss(),
+  ],
   server: {
     host: '127.0.0.1',
     port: 5173,
@@ -10,5 +17,4 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   }
-})
-
+}))
