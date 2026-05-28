@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(white, green);
+        }
+        nav {
+            width: 100%;
+            background-color: #2e7d32;
+            padding: 15px 0;
+            display: flex;
+            justify-content: right;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-left a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-left a:hover {
+            color: #a5d6a7;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid green;
+            background-color: white;
+            color: green;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: green;
+            color: white;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+        .leaderboard {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-left">
+            <a href="help.html">Help/FAQ</a>
+        </div>    
+    </nav>
+    <div class="quiz-container">
+        <p class="question" id="question-text">Loading question...</p>
+        <ul class="options" id="options-list"></ul>
+        <p id="result"></p>
+    </div>
+    <div class="leaderboard" id="leaderboard">
+        <h2>Leaderboard</h2>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+    <script>
+        const quizData = [
+            { question: "What is the purpose of the #include directive in C/C++?", options: ["To define a function","To declare a variable","To include a header file","To compile a program"], answer: 3 },
+            { question: "What is the difference between =, ==, and === in C/C++?", options: ["= is used for assignment, == is used for equality, and === is used for identity","= is used for equality, == is used for assignment, and === is not used in C/C++","= is used for assignment, == is used for equality, and === is not used in C/C++","= is used for equality, == is used for assignment, and === is used for identity"], answer: 3 },
+            { question: "What is the difference between int and unsigned int in C/C++?", options: ["int is used for signed integers, while unsigned int is used for unsigned integers","int is used for unsigned integers, while unsigned int is used for signed integers","int is used for floating-point numbers, while unsigned int is used for integers","int is used for integers, while unsigned int is used for floating-point numbers"], answer: 1 },
+            { question: "What is the purpose of the const keyword in C/C++?", options: ["To declare a variable that can be modified","To declare a variable that cannot be modified","To declare a function that can be modified","To declare a function that cannot be modified"], answer: 2 },
+            { question: "What is the purpose of the if statement in C/C++?", options: ["To execute a block of code if a condition is true","To execute a block of code if a condition is false","To skip a block of code if a condition is true","To skip a block of code if a condition is false"], answer: 1 }
+        
+
+
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            let questionElement = document.getElementById("question-text");
+            let optionsList = document.getElementById("options-list");
+            let resultElement = document.getElementById("result");
+            resultElement.textContent = "";
+            
+            let currentQuestion = quizData[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsList.innerHTML = "";
+            
+            currentQuestion.options.forEach((option, index) => {
+                let li = document.createElement("li");
+                let button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                li.appendChild(button);
+                optionsList.appendChild(li);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            let result = document.getElementById("result");
+            if (selectedIndex === quizData[currentQuestionIndex].answer) {
+                result.textContent = "Correct!";
+                result.className = "correct";
+                score += 10;
+                setTimeout(nextQuestion, 1000);
+            } else {
+                result.textContent = "Wrong! Try again.";
+                result.className = "wrong";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showLeaderboard();
+            }
+        }
+
+        function showLeaderboard() {
+            document.querySelector(".quiz-container").style.display = "none";
+            document.getElementById("leaderboard").style.display = "block";
+            document.getElementById("score").textContent = score;
+        }
+
+        loadQuestion();
+    </script>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

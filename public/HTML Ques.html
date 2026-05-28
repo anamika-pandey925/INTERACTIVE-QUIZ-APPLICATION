@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Quiz - Modern</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Modern CSS */
+        :root {
+            --bg-grad-1: #0f172a;
+            --bg-grad-2: #1e1b4b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Card */
+        .quiz-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Header (Question num + Timer) */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .question-num {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Circular Timer */
+        .timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            font-weight: 800;
+            font-size: 18px;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .timer.warning {
+            color: var(--danger);
+            border-color: var(--danger);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 15px var(--danger); }
+            100% { transform: scale(1); }
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .option:hover:not(:disabled) {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .option:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .option.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .icon { font-size: 20px; font-weight: 800; }
+
+        .next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 30px;
+            width: 100%;
+            transition: all 0.3s;
+            display: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .next-btn:hover {
+            background: #2563eb;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            display: none;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 48px;
+            font-weight: 900;
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container { padding: 30px 20px; }
+            .question { font-size: 20px; }
+            .option { padding: 14px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <div class="header">
+            <div class="question-num" id="q-num">Question 1 / 5</div>
+            <div class="timer" id="timer">15</div>
+        </div>
+
+        <div class="question" id="question-text">Loading question...</div>
+        
+        <div class="options" id="options-list"></div>
+
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
+    </div>
+
+    <div class="leaderboard" id="leaderboard">
+        <h2 style="font-size: 32px; margin-bottom: 10px;">Quiz Complete!</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">Here is your final score.</p>
+        <div class="score-circle">
+            <span id="score">0</span>
+        </div>
+        <button class="next-btn" style="display:block" onclick="location.reload()">Play Again</button>
+        <button class="next-btn" style="display:block; background: transparent; border: 2px solid var(--primary); margin-top:15px; color: var(--text-main);" onclick="location.href='index.html'">Go to Home</button>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Tech Modern Layout", "HyperText Markup Language", "Home Tool Markup Language"], answer: 2 },
+            { question: "Which language is used for styling web pages?", options: ["HTML", "CSS", "JavaScript", "Python"], answer: 1 },
+            { question: "Which is not a JavaScript framework?", options: ["React", "Angular", "Django", "Vue"], answer: 2 },
+            { question: "What is HTML?", options: ["HTML describes the structure of a webpage", "HTML is the standard markup language mainly used to create web pages", "HTML consists of a set of elements that helps the browser how to view the content", "All of the mentioned"], answer: 3 },
+            { question: "What is the correct syntax of doctype in HTML5?", options: ["</doctype html>", "<doctype html>", "<doctype html!>", "<!doctype html>"], answer: 3 }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 15;
+        let timerInterval;
+
+        const questionEl = document.getElementById("question-text");
+        const optionsList = document.getElementById("options-list");
+        const nextBtn = document.getElementById("next-btn");
+        const progressEl = document.getElementById("progress");
+        const qNumEl = document.getElementById("q-num");
+        const timerEl = document.getElementById("timer");
+
+        function loadQuestion() {
+            resetState();
+            let currentQuestion = quizData[currentQuestionIndex];
+            
+            qNumEl.textContent = `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
+            progressEl.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+            questionEl.textContent = currentQuestion.question;
+
+            currentQuestion.options.forEach((option, index) => {
+                let button = document.createElement("button");
+                button.className = "option";
+                
+                let spanText = document.createElement("span");
+                spanText.textContent = option;
+                
+                let spanIcon = document.createElement("span");
+                spanIcon.className = "icon";
+                
+                button.appendChild(spanText);
+                button.appendChild(spanIcon);
+                
+                button.onclick = () => selectAnswer(button, index);
+                optionsList.appendChild(button);
+            });
+
+            startTimer();
+        }
+
+        function resetState() {
+            clearInterval(timerInterval);
+            timeLeft = 15;
+            timerEl.textContent = timeLeft;
+            timerEl.classList.remove('warning');
+            nextBtn.style.display = "none";
+            optionsList.innerHTML = "";
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    timerEl.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut();
+                }
+            }, 1000);
+        }
+
+        function handleTimeOut() {
+            const options = document.querySelectorAll(".option");
+            const correctIndex = quizData[currentQuestionIndex].answer;
+            
+            options.forEach((opt, idx) => {
+                opt.disabled = true;
+                if(idx === correctIndex) {
+                    opt.classList.add("correct");
+                    opt.querySelector('.icon').textContent = "✓";
+                }
+            });
+            nextBtn.style.display = "block";
+        }
+
+        function selectAnswer(selectedButton, selectedIndex) {
+            clearInterval(timerInterval);
+            const correctIndex = quizData[currentQuestionIndex].answer;
+            const options = document.querySelectorAll(".option");
+
+            options.forEach(opt => opt.disabled = true);
+
+            if (selectedIndex === correctIndex) {
+                selectedButton.classList.add("correct");
+                selectedButton.querySelector('.icon').textContent = "✓";
+                score += 10;
+            } else {
+                selectedButton.classList.add("wrong");
+                selectedButton.querySelector('.icon').textContent = "✗";
+                
+                // Show correct one
+                options[correctIndex].classList.add("correct");
+                options[correctIndex].querySelector('.icon').textContent = "✓";
+            }
+
+            nextBtn.style.display = "block";
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showLeaderboard();
+            }
+        }
+
+        function showLeaderboard() {
+            progressEl.style.width = "100%";
+            setTimeout(() => {
+                document.getElementById("quiz-box").style.display = "none";
+                document.getElementById("leaderboard").style.display = "block";
+                document.getElementById("score").textContent = score;
+            }, 500);
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
