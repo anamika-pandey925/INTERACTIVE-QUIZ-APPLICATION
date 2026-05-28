@@ -7,6 +7,7 @@
     "dev": "vite dev.html",
     "start": "vite dev.html",
     "build": "vite build",
+    "postbuild": "node postbuild.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
