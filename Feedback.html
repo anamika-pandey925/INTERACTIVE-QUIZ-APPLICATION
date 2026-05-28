@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0fff0;
+            color: #004d00;
+            margin: 0;
+            padding: 20px;
+        }
+        nav {
+            width: 100%;
+            background-color: #2e7d32;
+            padding: 15px 0;
+            display: flex;
+            justify-content: right;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .nav-left a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-left a:hover {
+            color: #a5d6a7;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 128, 0, 0.2);
+            margin: auto;
+        }
+        h2 {
+            text-align: center;
+            color: #008000;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        select, textarea, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #008000;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #008000;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="help.html">Help/FAQ</a>
+        </div>    
+    </nav>
+    
+    <div class="container">
+        <h2>Quiz Feedback Form</h2>
+        <form id="feedbackForm">
+            <label>How would you rate the overall quality of the quizzes?</label>
+            <select>
+                <option>Excellent</option>
+                <option>Good</option>
+                <option>Fair</option>
+                <option>Poor</option>
+            </select>
+
+            <label>Were the quizzes engaging and fun?</label>
+            <select>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Somewhat</option>
+            </select>
+
+            <label>Were the questions clear and concise?</label>
+            <select>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Somewhat</option>
+            </select>
+
+            <label>Was the content relevant and useful?</label>
+            <select>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Somewhat</option>
+            </select>
+
+            <label>Were the questions too easy or too difficult?</label>
+            <select>
+                <option>Too Easy</option>
+                <option>Too Difficult</option>
+                <option>Just Right</option>
+            </select>
+
+            <label>Were there any topics or areas that you felt were missing?</label>
+            <input type="text" placeholder="Your answer">
+
+            <label>Did you experience any technical issues while taking the quizzes?</label>
+            <select id="technicalIssue">
+                <option>No</option>
+                <option>Yes</option>
+            </select>
+
+            <label>If yes, please describe the issue(s) you encountered.</label>
+            <textarea id="issueDescription" placeholder="Describe the issue" disabled></textarea>
+
+            <label>Do you have any additional comments or suggestions?</label>
+            <textarea placeholder="Your comments"></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('technicalIssue').addEventListener('change', function() {
+            document.getElementById('issueDescription').disabled = this.value === 'No';
+        });
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for your feedback!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
