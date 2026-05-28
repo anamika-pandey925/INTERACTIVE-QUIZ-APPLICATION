@@ -127,12 +127,12 @@ function App() {
               📚 Standard Practice Tests
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <a href="HTML Ques.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">HTML</a>
-                <a href="CSS Ques.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">CSS</a>
-                <a href="JavaScript Ques.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">JavaScript</a>
-                <a href="Python Ques.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">Python</a>
-                <a href="C++.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">C/C++</a>
-                <a href="Java Ques.html" className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">Java</a>
+                <a href={`${import.meta.env.BASE_URL}HTML Ques.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">HTML</a>
+                <a href={`${import.meta.env.BASE_URL}CSS Ques.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">CSS</a>
+                <a href={`${import.meta.env.BASE_URL}JavaScript Ques.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">JavaScript</a>
+                <a href={`${import.meta.env.BASE_URL}Python Ques.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">Python</a>
+                <a href={`${import.meta.env.BASE_URL}C++.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">C/C++</a>
+                <a href={`${import.meta.env.BASE_URL}Java Ques.html`} className="bg-[#28a745] hover:bg-[#218838] text-white p-4 rounded-xl text-center font-bold transition-all shadow-md hover:-translate-y-1">Java</a>
             </div>
           </div>
         </div>
