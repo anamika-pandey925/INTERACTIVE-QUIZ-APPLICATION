@@ -4,10 +4,9 @@
   "description": "*COMPANY*: CODTECH IT SOLUTIONS",
   "main": "index.js",
   "scripts": {
-    "dev": "vite dev.html",
-    "start": "vite dev.html",
+    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
-    "postbuild": "node postbuild.js",
     "sync": "node sync.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",

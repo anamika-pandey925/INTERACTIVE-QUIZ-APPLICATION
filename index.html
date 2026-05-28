@@ -3,12 +3,237 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Quiz App</title>
-    <script type="module" crossorigin src="/INTERACTIVE-QUIZ-APPLICATION/assets/main-CrNPTrny.js"></script>
-    <link rel="modulepreload" crossorigin href="/INTERACTIVE-QUIZ-APPLICATION/assets/chunk-BNv3lrIs.js">
-    <link rel="stylesheet" crossorigin href="/INTERACTIVE-QUIZ-APPLICATION/assets/main-CzjLLbtV.css">
+    <title>BrainBurst - Interactive Quiz & Prep Platform</title>
+    <!-- Modern Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Shifting Gradient Background Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Active Confetti Emitter Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Global App Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-emoji">⚡</span>
+        <span class="logo-text">BrainBurst</span>
+      </div>
+      <div class="header-controls">
+        <button id="sound-toggle" class="control-btn" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg id="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="sound-off-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+        <button id="theme-toggle" class="control-btn" aria-label="Toggle Dark Mode" title="Toggle Theme">
+          <svg id="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg id="sun-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-container">
+      
+      <!-- 1. SETUP / WELCOME SCREEN -->
+      <section id="setup-screen" class="glass-card fade-in">
+        <div class="setup-hero">
+          <div class="hero-icon">🧠</div>
+          <h1>Expand Your <span class="gradient-text">Knowledge.</span></h1>
+          <p>Unleash your potential with dynamic quizzes, interactive leaderboards, and instant technical review.</p>
+        </div>
+
+        <form id="setup-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="username-input">Enter Your Name</label>
+            <input type="text" id="username-input" placeholder="e.g., Anamika" autocomplete="off" required />
+          </div>
+
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="category-select">Select Category</label>
+              <select id="category-select">
+                <option value="any">Any Category</option>
+                <!-- Categories dynamically loaded by JS -->
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Select Difficulty</label>
+              <div class="difficulty-group">
+                <label class="diff-btn">
+                  <input type="radio" name="difficulty" value="easy" checked />
+                  <span>Easy</span>
+                </label>
+                <label class="diff-btn">
+                  <input type="radio" name="difficulty" value="medium" />
+                  <span>Medium</span>
+                </label>
+                <label class="diff-btn">
+                  <input type="radio" name="difficulty" value="hard" />
+                  <span>Hard</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="start-btn" class="primary-btn">
+            <span>Start Brainburst Quiz</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- 2. QUIZ RUNTIME SCREEN -->
+      <section id="quiz-screen" class="glass-card hidden">
+        <!-- Top Progress Metrics -->
+        <div class="progress-bar-container">
+          <div id="progress-indicator" class="progress-indicator"></div>
+        </div>
+
+        <div class="quiz-header">
+          <div class="question-tracker">
+            <span class="muted-text">Progress</span>
+            <h3 id="question-count-text">Question 1 of 10</h3>
+          </div>
+
+          <!-- Circular SVG Countdown Timer -->
+          <div class="timer-wrapper">
+            <svg class="timer-svg" viewBox="0 0 100 100">
+              <circle class="timer-bg" cx="50" cy="50" r="44"></circle>
+              <circle id="timer-progress" class="timer-stroke" cx="50" cy="50" r="44"></circle>
+            </svg>
+            <span id="timer-text" class="timer-text">15</span>
+          </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="question-container">
+          <div class="question-meta">
+            <span id="meta-category" class="meta-tag">Science & Nature</span>
+            <span id="meta-difficulty" class="meta-tag diff-tag-medium">Medium</span>
+          </div>
+          <h2 id="question-text">Loading question text...</h2>
+        </div>
+
+        <!-- Options Container -->
+        <div id="options-grid" class="options-grid">
+          <!-- Dynamically populated option buttons -->
+        </div>
+
+        <!-- Instant Feedback Box -->
+        <div id="explanation-box" class="explanation-box hidden">
+          <div class="explanation-icon">✨</div>
+          <div class="explanation-content">
+            <h4 id="feedback-title">Correct!</h4>
+            <p id="explanation-text">Explanation content goes here.</p>
+          </div>
+        </div>
+
+        <!-- Quiz Navigation Controls -->
+        <div class="quiz-controls">
+          <button id="prev-btn" class="secondary-btn" disabled>
+            <span>← Previous</span>
+          </button>
+          <button id="skip-btn" class="secondary-btn">
+            <span>Skip ⚡</span>
+          </button>
+          <button id="next-btn" class="primary-btn" disabled>
+            <span>Next Question →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 3. RESULTS & LEADERBOARD SCREEN -->
+      <section id="result-screen" class="glass-card hidden">
+        <div class="result-header">
+          <div class="hero-icon" id="result-emoji">🏆</div>
+          <h1 id="result-headline" class="gradient-text">Excellent Job!</h1>
+          <p id="result-motivation">You achieved a premium score. Check your performance metrics below.</p>
+        </div>
+
+        <!-- Metric Scoreboard Grid -->
+        <div class="score-grid">
+          <div class="score-card">
+            <span class="score-value" id="res-score">0</span>
+            <span class="score-label">Total Points</span>
+          </div>
+          <div class="score-card text-success">
+            <span class="score-value" id="res-correct">0</span>
+            <span class="score-label">Correct</span>
+          </div>
+          <div class="score-card text-danger">
+            <span class="score-value" id="res-wrong">0</span>
+            <span class="score-label">Wrong</span>
+          </div>
+          <div class="score-card">
+            <span class="score-value" id="res-percent">0%</span>
+            <span class="score-label">Accuracy</span>
+          </div>
+        </div>
+
+        <!-- Leaderboard & Quick Action Tab Section -->
+        <div class="grid-2 mt-8">
+          
+          <!-- Leaderboard Panel -->
+          <div class="sub-glass-panel">
+            <h3 class="panel-title">🏆 Top Hall of Fame</h3>
+            <ol id="leaderboard-list" class="leaderboard-list">
+              <!-- Dynamically populated top players -->
+            </ol>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="action-panel">
+            <h3 class="panel-title">💡 What's Next?</h3>
+            <p class="mb-6 muted-text text-sm">Review your answers below to learn from mistakes, or start a fresh quiz to challenge your high score!</p>
+            <div class="flex-column gap-3">
+              <button id="restart-btn" class="primary-btn w-full">Restart Quiz</button>
+              <button id="home-btn" class="secondary-btn w-full">Change Settings</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Comprehensive Review Answers Section -->
+        <div class="review-section mt-10">
+          <h2 class="section-title">🔍 Comprehensive Question Review</h2>
+          <div id="review-container" class="review-container">
+            <!-- Dynamically populated answer list -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Global App Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 BrainBurst Interactive Platform. Crafted for Visual & Educational Excellence.</p>
+    </footer>
+
+    <!-- Global Script Engine -->
+    <script type="module" src="script.js"></script>
   </body>
 </html>
